@@ -19,25 +19,26 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     if (article == null) {
       article = ArticleBean();
-      article.title = "加载中";
-      article.content = "加载中";
+      article.data = DataBean();
+      article.data.title = "加载中";
+      article.data.content = "加载中";
     }
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(article.title),
+        title: Text(article.data.title),
         centerTitle: true,
       ),
       body: ListView(
         children: [
           Text.rich(
               TextSpan(
-                  text: article.date == null? "" : "(${article.date.curr}，作者：${article.author}，字数：${article.wc})",
+                  text: article.data.date == null? "" : "(${article.data.date.curr}，作者：${article.data.author}，字数：${article.data.wc})",
                   style:
                       TextStyle(color: Colors.grey, fontSize: 15, height: 1.4)),
               textAlign: TextAlign.end),
           Text(
-            article.content,
+            article.data.content,
             style: TextStyle(fontSize: 18),
             textAlign: TextAlign.start,
           )
