@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:one_article/bean/article_bean.dart';
 import 'package:one_article/network/api.dart';
 import 'package:one_article/pages/home_page.dart';
@@ -11,7 +10,6 @@ class SplashPage extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    SystemChrome.setEnabledSystemUIOverlays([]);
     return _SplashPageState();
   }
 }
@@ -30,7 +28,6 @@ class _SplashPageState extends State<SplashPage> {
   }
 
   void toHome(ArticleBean article) {
-    SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.top, SystemUiOverlay.bottom]);
     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage(article)));
   }
 
