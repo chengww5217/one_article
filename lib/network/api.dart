@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:one_article/bean/article_bean.dart';
 import 'package:http/http.dart' as http;
+import 'package:one_article/utils/date_util.dart';
 
 final String baseUrl = "https://interface.meiriyiwen.com";
 
@@ -35,6 +36,9 @@ class Article {
         articleBean.content = articleBean.content
             .replaceAll(RegExp(r"<p>|<P>"), "        ")
             .replaceAll(RegExp(r"</p>|</P>"), "\n\n");
+      }
+      if (articleBean.date != null) {
+        articleBean.date.curr = getRelatedTime(str2Date(articleBean.date.curr));
       }
     }
     return articleBean;
