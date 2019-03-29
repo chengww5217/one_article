@@ -20,7 +20,8 @@ class _HomePageState extends State<HomePage> {
   double _fontSize = 18;
 
   @override
-  Widget build(BuildContext context) {
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     getFontSize().then((value) {
       if (value != _fontSize) {
         setState(() {
@@ -35,7 +36,10 @@ class _HomePageState extends State<HomePage> {
       article.data.content = "加载中";
       article.starred = false;
     }
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(article.data.title),
@@ -132,6 +136,5 @@ class _HomePageState extends State<HomePage> {
   }
 
 }
-
 
 
