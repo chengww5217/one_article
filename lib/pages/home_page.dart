@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:one_article/bean/article_bean.dart';
 import 'package:one_article/db/database.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 class HomePage extends StatefulWidget {
   final ArticleBean article;
@@ -20,6 +22,13 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    _getFontSize().then((value) {
+      if (value != _fontSize) {
+        setState(() {
+          _fontSize = value;
+        });
+      }
+    });
     if (article == null) {
       article = ArticleBean();
       article.data = DataBean();
@@ -97,8 +106,8 @@ class _HomePageState extends State<HomePage> {
                             Expanded(
                                 child: Slider(
                               onChanged: (double value) {
-                                mSetState(
-                                    () => _fontSize = value.roundToDouble());
+                                _storeFontSize(value.roundToDouble());
+                                mSetState(() => _fontSize = value.roundToDouble());
                                 setState(() {});
                               },
                               divisions: 16,
@@ -122,4 +131,18 @@ class _HomePageState extends State<HomePage> {
           );
         });
   }
+
+}
+
+
+final String fontSizeKey = "fontSize";
+
+_storeFontSize(double value) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  prefs.setDouble(fontSizeKey, value);
+}
+
+Future<double> _getFontSize() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  return prefs.getDouble(fontSizeKey) ?? 18;
 }
