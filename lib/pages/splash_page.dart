@@ -19,11 +19,10 @@ class _SplashPageState extends State<SplashPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-//    Future.delayed(const Duration(seconds: 3), () => toHome(null));
+    Future.delayed(const Duration(seconds: 3), () => toHome(null));
     Article.today().then((article) {
       toHome(article);
     }).catchError((e) {
-      print(e);
       toHome(null);
     });
   }
