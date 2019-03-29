@@ -46,7 +46,7 @@ class _HomePageState extends State<HomePage> {
               TextSpan(
                   text: article.data.date == null
                       ? ""
-                      : "(${article.data.date.curr}，作者：${article.data.author}，字数：${article.data.wc})",
+                      : "(${article.data.date.curr}，作者：${article.data.author}，共${article.data.wc}字)",
                   style: TextStyle(
                       color: Colors.grey,
                       fontSize: _fontSize - 3,
