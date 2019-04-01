@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:one_article/bean/article_bean.dart';
 import 'package:one_article/db/database.dart';
+import 'package:one_article/network/api.dart';
 import 'package:one_article/utils/sp_store_util.dart';
 
 class HomePage extends StatefulWidget {
@@ -30,11 +31,7 @@ class _HomePageState extends State<HomePage> {
       }
     });
     if (article == null) {
-      article = ArticleBean();
-      article.data = DataBean();
-      article.data.title = "加载中";
-      article.data.content = "加载中";
-      article.starred = false;
+      loadData();
     }
   }
 
@@ -64,10 +61,22 @@ class _HomePageState extends State<HomePage> {
                       fontSize: _fontSize - 3,
                       height: 1.4)),
               textAlign: TextAlign.end),
-          Text(
-            article.data.content,
-            style: TextStyle(fontSize: _fontSize),
-            textAlign: TextAlign.start,
+          InkWell(
+            onTap: () {
+              if (article.data.date == null) {
+                loadData();
+              } else {
+                return true;
+              }
+            },
+            child: Container(
+              child: Text(
+                article.data.content,
+                style: TextStyle(fontSize: _fontSize),
+                textAlign: TextAlign.start,
+              ),
+              color: article.data.date == null ? Colors.transparent : Theme.of(context).canvasColor,
+            ),
           )
         ],
         padding: const EdgeInsets.all(10),
@@ -110,7 +119,8 @@ class _HomePageState extends State<HomePage> {
                                 child: Slider(
                               onChanged: (double value) {
                                 storeFontSize(value.roundToDouble());
-                                mSetState(() => _fontSize = value.roundToDouble());
+                                mSetState(
+                                    () => _fontSize = value.roundToDouble());
                                 setState(() {});
                               },
                               divisions: 16,
@@ -135,6 +145,23 @@ class _HomePageState extends State<HomePage> {
         });
   }
 
+  void loadData() {
+    article = ArticleBean();
+    article.data = DataBean();
+    article.data.title = "加载中";
+    article.data.content = "加载中";
+    article.starred = false;
+    setState(() {});
+    Article.today().then((article) {
+      setState(() {
+        this.article = article;
+      });
+    }).catchError((e) {
+      setState(() {
+        article.data.title = "加载失败";
+        article.data.content = "加载失败，请点击重试";
+        this.article = article;
+      });
+    });
+  }
 }
-
-
