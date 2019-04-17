@@ -1,0 +1,21 @@
+{
+  "author": "作者",
+  "word_count": "字数",
+  "action_loading": "加载中",
+  "action_load_error": "加载失败",
+  "content_load_error": "加载失败，点击重试。",
+  "today": "今天",
+  "yesterday": "昨天",
+  "action_font_size": "字号",
+  "action_theme" : "主题",
+  "action_starred" : "已收藏",
+  "action_not_starred" : "未收藏",
+  "action_starred_list" : "收藏列表",
+  "title_clear_starred" : "确定要清空所有收藏吗？",
+  "action_cancel" : "取消",
+  "action_ok" : "确定",
+  "content_not_starred" : "还没有收藏任何文章",
+  "random": "随机",
+  "day_after": "后一天",
+  "day_before": "前一天"
+}

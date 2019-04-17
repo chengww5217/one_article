@@ -1,0 +1,21 @@
+{
+  "author": "author",
+  "word_count": "word count",
+  "action_loading": "Loading",
+  "action_load_error": "Load Error",
+  "content_load_error": "Load error, click to reload.",
+  "today": "Today",
+  "yesterday": "Yesterday",
+  "action_font_size": "Font Size",
+  "action_theme" : "Theme",
+  "action_starred" : "Starred",
+  "action_not_starred" : "Not Starred",
+  "action_starred_list" : "Starred List",
+  "title_clear_starred" : "Are you sure to clear all starred articles?",
+  "action_cancel" : "Cancel",
+  "action_ok" : "OK",
+  "content_not_starred" : "No articles have been starred yet.",
+  "random": "Random",
+  "day_after": "Day After",
+  "day_before": "Day Before"
+}
