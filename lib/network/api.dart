@@ -4,6 +4,7 @@ import 'package:one_article/bean/article_bean.dart';
 import 'package:http/http.dart' as http;
 import 'package:one_article/db/database.dart';
 import 'package:one_article/utils/date_util.dart';
+import 'package:one_article/utils/errors.dart';
 import 'package:quiver/strings.dart' as strings;
 
 final String baseUrl = "https://interface.meiriyiwen.com";
@@ -53,26 +54,32 @@ class Article {
     ArticleBean articleBean;
     http.Response response = await http.get(url);
     if (response.statusCode >= 200 && response.statusCode < 400) {
-      Map<String, dynamic> jsonStr = json.decode(response.body);
-      articleBean = ArticleBean.fromJson(jsonStr);
-      DataBean data = articleBean.data;
-      if (data.content != null) {
-        data.content = data.content
-            .replaceAll(RegExp(r"<p>|<P>"), "        ")
-            .replaceAll(RegExp(r"</p>|</P>"), "\n\n");
-      }
-      if (data.date != null) {
-        articleBean.date = data.date.curr;
-      }
-
-      ArticleProvider provider = ArticleProvider();
-      if (url.contains(randomArticle)) {
-        ArticleBean local = await provider.getFromDB(articleBean.date);
-        if (local != null) {
-          articleBean.starred = local.starred;
+      try {
+        Map<String, dynamic> jsonStr = json.decode(response.body);
+        articleBean = ArticleBean.fromJson(jsonStr);
+        DataBean data = articleBean.data;
+        if (data.content != null) {
+          data.content = data.content
+              .replaceAll(RegExp(r"<p>|<P>"), "        ")
+              .replaceAll(RegExp(r"</p>|</P>"), "\n\n");
         }
+        if (data.date != null) {
+          articleBean.date = data.date.curr;
+        }
+
+        ArticleProvider provider = ArticleProvider();
+        if (url.contains(randomArticle)) {
+          ArticleBean local = await provider.getFromDB(articleBean.date);
+          if (local != null) {
+            articleBean.starred = local.starred;
+          }
+        }
+        await provider.insertOrReplaceToDB(articleBean);
+      } catch (e) {
+        throw NetError(response: response, error: e);
       }
-      await provider.insertOrReplaceToDB(articleBean);
+    } else {
+      throw NetError(response: response);
     }
     return articleBean;
   }

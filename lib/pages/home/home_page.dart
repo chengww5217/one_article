@@ -232,6 +232,7 @@ class _HomePageState extends State<HomePage>
         this.article = article;
       });
     }).catchError((e) {
+      print(e);
       setState(() {
         article.data.title = S.of(context).action_load_error;
         article.data.content = S.of(context).content_load_error;
