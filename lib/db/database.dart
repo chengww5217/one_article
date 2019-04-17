@@ -128,6 +128,7 @@ class ArticleProvider extends BaseDBProvider {
   String tableName() => name;
 
   Future<ArticleBean> getFromDB(String date) async {
+    if (date == null) return null;
     Database db = await getDB();
     List<Map<String, dynamic>> maps =
     await db.query(name, columns: [columnId, columnStarred, columnDate, columnData], where: "$columnDate = ?", whereArgs: [date]);
@@ -138,16 +139,39 @@ class ArticleProvider extends BaseDBProvider {
     return null;
   }
 
-  Future insertOrReplaceToDB(ArticleBean article) async {
+  Future<int> insertOrReplaceToDB(ArticleBean article) async {
     String date = article?.date;
     if (article == null || strings.isEmpty(date)) return null;
     Database db = await getDB();
     var provider = await getFromDB(date);
     Map<String, dynamic> map = article.toMap();
     if (provider != null) {
-      await db.update(name, map, where: "$columnDate = ?", whereArgs: [date]);
+      return await db.update(name, map, where: "$columnDate = ?", whereArgs: [date]);
     }
     return await db.insert(name, map);
+  }
+
+  Future<List<ArticleBean>> getStarred() async {
+    List<ArticleBean> articles = List();
+    Database db = await getDB();
+    List<Map<String, dynamic>> maps =
+    await db.query(name, columns: [columnId, columnStarred, columnDate, columnData], where: "$columnStarred > ?", whereArgs: [0]);
+    if (maps.length > 0) {
+      for (Map<String, dynamic> map in maps) {
+        ArticleBean article = ArticleBean.fromJson(map);
+        articles.add(article);
+      }
+    }
+    return articles;
+  }
+
+  Future<void> clearStarred() async {
+    List<ArticleBean> articles = await getStarred();
+    Database db = await getDB();
+    for (ArticleBean article in articles) {
+      article.starred = false;
+      db.update(name, article.toMap(), where: "$columnDate = ?", whereArgs: [article.date]);
+    }
   }
 
 }
