@@ -1,13 +1,14 @@
-String getRelatedTime(DateTime date) {
+import 'package:flutter/material.dart';
+import 'package:one_article/generated/i18n.dart';
+
+String getRelatedTime(BuildContext context, DateTime date) {
   int subDay = DateTime.now().day - date?.day;
 
   if (subDay >= 0) {
     if (subDay < 1) {
-      return "今天";
+      return S.of(context).today;
     } else if (subDay < 2) {
-      return "昨天";
-    } else if (subDay < 3) {
-      return "前天";
+      return S.of(context).yesterday;
     }
   }
   return formatDate(date);
@@ -15,7 +16,8 @@ String getRelatedTime(DateTime date) {
 
 /// Format date as "yyyymmdddd"
 String formatDate(DateTime date) {
-  return "${date.year}${_twoDigits(date.month)}${_twoDigits(date.day)}";
+  if (date == null) date = DateTime.now();
+  return "${date.year}${twoDigits(date.month)}${twoDigits(date.day)}";
 }
 
 DateTime str2Date(String dateStr) {
@@ -30,7 +32,7 @@ DateTime str2Date(String dateStr) {
   }
 }
 
-String _twoDigits(int n) {
+String twoDigits(int n) {
   if (n >= 10) return "${n}";
   return "0${n}";
 }
