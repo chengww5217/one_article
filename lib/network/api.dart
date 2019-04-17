@@ -29,17 +29,23 @@ class Article {
     ArticleBean articleBean;
     String url;
     if (!strings.isEmpty(date)) {
-      ArticleProvider provider = ArticleProvider();
-      articleBean = await provider.getFromDB(date);
-      if (articleBean == null) {
+      if ("today" == date) {
+        url = "$baseUrl$todayArticle";
+      } else if ("random" == date) {
+        url = "$baseUrl$randomArticle";
+      } else {
         url = "$baseUrl$somedayArticle$date";
-        articleBean = await getRequest(url);
+        ArticleProvider provider = ArticleProvider();
+        articleBean = await provider.getFromDB(date);
       }
     } else {
-      url =  "$baseUrl$randomArticle";
+      url = "$baseUrl$randomArticle";
+    }
+
+    if (articleBean == null) {
       articleBean = await getRequest(url);
     }
-    
+
     return articleBean;
   }
 
@@ -57,9 +63,15 @@ class Article {
       }
       if (data.date != null) {
         articleBean.date = data.date.curr;
-        data.date.curr = getRelatedTime(str2Date(data.date.curr));
       }
+
       ArticleProvider provider = ArticleProvider();
+      if (url.contains(randomArticle)) {
+        ArticleBean local = await provider.getFromDB(articleBean.date);
+        if (local != null) {
+          articleBean.starred = local.starred;
+        }
+      }
       await provider.insertOrReplaceToDB(articleBean);
     }
     return articleBean;
