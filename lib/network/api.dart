@@ -18,7 +18,7 @@ class Article {
   }
 
   static Future<ArticleBean> random() async {
-    return await getArticle();
+    return await getArticle(date: "random");
   }
 
   static Future<ArticleBean> someday(String someday) async {
