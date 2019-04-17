@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:one_article/bean/article_bean.dart';
 import 'package:one_article/network/api.dart';
-import 'package:one_article/pages/home_page/home_page.dart';
+import 'package:one_article/pages/home/home_page.dart';
 
 class SplashPage extends StatefulWidget {
   SplashPage({Key key, this.title}) : super(key: key);
@@ -16,6 +16,8 @@ class SplashPage extends StatefulWidget {
 
 class _SplashPageState extends State<SplashPage> {
 
+  bool _disposed = false;
+
   @override
   void initState() {
     Future.delayed(const Duration(seconds: 3), () => toHome(null));
@@ -28,6 +30,7 @@ class _SplashPageState extends State<SplashPage> {
   }
 
   void toHome(ArticleBean article) {
+    if (_disposed) return;
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => HomePage(article)));
   }
@@ -39,5 +42,11 @@ class _SplashPageState extends State<SplashPage> {
         child: Image(image: AssetImage('assets/images/splash.png'), fit: BoxFit.fill,),
       );
     });
+  }
+
+  @override
+  void dispose() {
+    _disposed = true;
+    super.dispose();
   }
 }
