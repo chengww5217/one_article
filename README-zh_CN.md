@@ -1,6 +1,6 @@
 # 一文
 
-(English)[./README.md] | 简体中文
+[English](./README.md) | 简体中文
 
 基于[每日一文 API](https://meiriyiwen.com/) 开发的一款全新的 Flutter App。
 
