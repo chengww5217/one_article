@@ -126,10 +126,10 @@ class _HomePageState extends State<HomePage>
   }
 
   void onStarPressed() {
-    provider.insertOrReplaceToDB(article);
     setState(() {
       article.starred = !article.starred;
     });
+    provider.insertOrReplaceToDB(article);
   }
 
   void _bottomMenu() {
